@@ -1,24 +1,19 @@
-import java.util.concurrent.CountDownLatch;
-
-class Foo {
-    CountDownLatch first = new CountDownLatch(1);
-    CountDownLatch second = new CountDownLatch(1);
-
-    public Foo() {}
-
-    public void first(Runnable printFirst) {
-        printFirst.run();
-        first.countDown();
-    }
-
-    public void second(Runnable printSecond) throws InterruptedException {
-        first.await();
-        printSecond.run();
-        second.countDown();
-    }
-
-    public void third(Runnable printThird) throws InterruptedException {
-        second.await();
-        printThird.run();
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) return false;
+                char top = stack.pop();
+                if (c == ')' && top != '(') return false;
+                if (c == ']' && top != '[') return false;
+                if (c == '}' && top != '{') return false;
+            }
+        }
+        
+        return stack.isEmpty();
     }
 }
