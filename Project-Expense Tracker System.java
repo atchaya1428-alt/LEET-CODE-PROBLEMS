@@ -2,88 +2,87 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class Expense {
-
-    private ArrayList<Integer> ids;
-    private ArrayList<String> categories;
-    private ArrayList<Double> amounts;
-
-    public Expense() {
-        ids = new ArrayList<>();
-        categories = new ArrayList<>();
-        amounts = new ArrayList<>();
-    }
+    private final ArrayList<Integer> ids = new ArrayList<>();
+    private final ArrayList<String> categories = new ArrayList<>();
+    private final ArrayList<Double> amounts = new ArrayList<>();
 
     public void addExpense(int id, String category, double amount) {
         ids.add(id);
         categories.add(category);
         amounts.add(amount);
-        System.out.println("Expense Added Successfully.");
+        System.out.println("Expense added successfully.");
     }
 
     public void viewExpenses() {
         if (ids.isEmpty()) {
-            System.out.println("No Expenses Found.");
+            System.out.println("No expenses found.");
             return;
         }
 
         System.out.println("\nID\tCategory\tAmount");
+        System.out.println("--------------------------------");
+
         for (int i = 0; i < ids.size(); i++) {
-            System.out.println(ids.get(i) + "\t" + categories.get(i) + "\t\t₹" + amounts.get(i));
+            System.out.printf("%d\t%s\t\t₹%.2f%n",
+                    ids.get(i), categories.get(i), amounts.get(i));
         }
     }
 
     public void searchExpense(int id) {
-        for (int i = 0; i < ids.size(); i++) {
-            if (ids.get(i) == id) {
-                System.out.println("Category : " + categories.get(i));
-                System.out.println("Amount : ₹" + amounts.get(i));
-                return;
-            }
+        int index = ids.indexOf(id);
+
+        if (index == -1) {
+            System.out.println("Expense not found.");
+            return;
         }
-        System.out.println("Expense Not Found.");
+
+        System.out.println("ID: " + ids.get(index));
+        System.out.println("Category: " + categories.get(index));
+        System.out.printf("Amount: ₹%.2f%n", amounts.get(index));
     }
 
     public void updateExpense(int id, String category, double amount) {
-        for (int i = 0; i < ids.size(); i++) {
-            if (ids.get(i) == id) {
-                categories.set(i, category);
-                amounts.set(i, amount);
-                System.out.println("Expense Updated Successfully.");
-                return;
-            }
+        int index = ids.indexOf(id);
+
+        if (index == -1) {
+            System.out.println("Expense not found.");
+            return;
         }
-        System.out.println("Expense Not Found.");
+
+        categories.set(index, category);
+        amounts.set(index, amount);
+        System.out.println("Expense updated successfully.");
     }
 
     public void deleteExpense(int id) {
-        for (int i = 0; i < ids.size(); i++) {
-            if (ids.get(i) == id) {
-                ids.remove(i);
-                categories.remove(i);
-                amounts.remove(i);
-                System.out.println("Expense Deleted Successfully.");
-                return;
-            }
+        int index = ids.indexOf(id);
+
+        if (index == -1) {
+            System.out.println("Expense not found.");
+            return;
         }
-        System.out.println("Expense Not Found.");
+
+        ids.remove(index);
+        categories.remove(index);
+        amounts.remove(index);
+        System.out.println("Expense deleted successfully.");
     }
 
     public void totalExpense() {
         double total = 0;
-        for (double amt : amounts) {
-            total += amt;
+
+        for (double amount : amounts) {
+            total += amount;
         }
-        System.out.println("Total Expense = ₹" + total);
+
+        System.out.printf("Total expense: ₹%.2f%n", total);
     }
 }
 
 public class ExpenseTracker {
-
     public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         Expense tracker = new Expense();
-
         int choice;
 
         do {
@@ -95,22 +94,28 @@ public class ExpenseTracker {
             System.out.println("5. Delete Expense");
             System.out.println("6. Total Expense");
             System.out.println("7. Exit");
-            System.out.print("Enter Choice: ");
+            System.out.print("Enter choice: ");
 
-            choice = sc.nextInt();
+            while (!scanner.hasNextInt()) {
+                System.out.print("Please enter a number: ");
+                scanner.next();
+            }
+
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
-
                 case 1:
                     System.out.print("Enter ID: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
 
-                    System.out.print("Enter Category: ");
-                    String category = sc.nextLine();
+                    System.out.print("Enter category: ");
+                    String category = scanner.nextLine();
 
-                    System.out.print("Enter Amount: ");
-                    double amount = sc.nextDouble();
+                    System.out.print("Enter amount: ");
+                    double amount = scanner.nextDouble();
+                    scanner.nextLine();
 
                     tracker.addExpense(id, category, amount);
                     break;
@@ -120,29 +125,31 @@ public class ExpenseTracker {
                     break;
 
                 case 3:
-                    System.out.print("Enter ID to Search: ");
-                    id = sc.nextInt();
+                    System.out.print("Enter ID to search: ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
                     tracker.searchExpense(id);
                     break;
 
                 case 4:
-                    System.
-out.print("Enter ID to Update: ");
-                    id = sc.nextInt();
-                    sc.nextLine();
+                    System.out.print("Enter ID to update: ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
 
-                    System.out.print("Enter New Category: ");
-                    category = sc.nextLine();
+                    System.out.print("Enter new category: ");
+                    category = scanner.nextLine();
 
-                    System.out.print("Enter New Amount: ");
-                    amount = sc.nextDouble();
+                    System.out.print("Enter new amount: ");
+                    amount = scanner.nextDouble();
+                    scanner.nextLine();
 
                     tracker.updateExpense(id, category, amount);
                     break;
 
                 case 5:
-                    System.out.print("Enter ID to Delete: ");
-                    id = sc.nextInt();
+                    System.out.print("Enter ID to delete: ");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
                     tracker.deleteExpense(id);
                     break;
 
@@ -151,15 +158,15 @@ out.print("Enter ID to Update: ");
                     break;
 
                 case 7:
-                    System.out.println("Thank You!");
+                    System.out.println("Thank you!");
                     break;
 
                 default:
-                    System.out.println("Invalid Choice!");
+                    System.out.println("Invalid choice.");
             }
 
         } while (choice != 7);
 
-        sc.close();
+        scanner.close();
     }
 }
